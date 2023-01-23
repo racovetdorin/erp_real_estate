@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_DB=erpdb
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - ENVIRONMENT=development
+      - POSTGRES_DB_USER=user
+      - POSTGRES_DB_NAME=erpdb
+      - POSTGRES_DB_PASSWORD=password
+      - POSTGRES_DB_HOST=db
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
