@@ -57,11 +57,11 @@ ROOT_URLCONF = 'erp.urls'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('PSQL_DB_NAME'),
-        'USER': config('PSQL_DB_USER'),
-        'PASSWORD': config('PSQL_DB_PASSWORD'),
-        'HOST': config('PSQL_DB_HOST'),
-        'PORT': config('PSQL_DB_PORT'),
+        'NAME': config('PSQL_DB_NAME', 'erpdb'),
+        'USER': config('PSQL_DB_USER', 'user'),
+        'PASSWORD': config('PSQL_DB_PASSWORD', 'password'),
+        'HOST': config('PSQL_DB_HOST', 'db'),
+        'PORT': config('PSQL_DB_PORT', '5432'),
     },
 }
 
