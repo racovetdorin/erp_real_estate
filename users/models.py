@@ -4,11 +4,21 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 
 
+class UserQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+
 class UserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)
+
+    def active(self):
+        return self.get_queryset().active()
 
     def create_user(self, email, password, **extra_fields):
         """
