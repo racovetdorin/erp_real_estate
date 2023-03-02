@@ -20,6 +20,9 @@ from properties import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(('users.urls', 'users'), namespace='users')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/', include('erp.api.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', views.index)
 ]
