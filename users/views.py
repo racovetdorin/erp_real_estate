@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from users.models import User
 from rest_framework import viewsets, permissions
 from users.serializers import UserSerializer

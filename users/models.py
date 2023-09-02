@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.translation import gettext as _
+from softdelete.models import SoftDeleteObject, SoftDeleteManager
 
 
 class UserQuerySet(models.QuerySet):
@@ -9,7 +9,7 @@ class UserQuerySet(models.QuerySet):
         return self.filter(is_active=True)
 
 
-class UserManager(BaseUserManager):
+class SoftDeleteUserManager(SoftDeleteManager, UserManager):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
@@ -47,15 +47,15 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser):
+class User(SoftDeleteObject, AbstractUser):
     username = None
-    first_name = models.CharField(verbose_name=_('First name'), max_length=150, blank=True, default='')
-    last_name = models.CharField(verbose_name=_('Last name'), max_length=150, blank=True, default='')
+    first_name = models.CharField(verbose_name=_('First name'), max_length=150)
+    last_name = models.CharField(verbose_name=_('Last name'), max_length=150)
     email = models.EmailField(verbose_name=_('Email'), unique=True, blank=False, null=False)
-    objects = UserManager()
+    objects = SoftDeleteUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return self.display_full_name()
@@ -63,5 +63,4 @@ class User(AbstractUser):
     def display_full_name(self):
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
-        else:
-            return self.email
+        return self.email

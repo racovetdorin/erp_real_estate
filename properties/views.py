@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Property
+# from .models import Property
 
 
 def index(request):

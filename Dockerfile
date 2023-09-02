@@ -1,19 +1,41 @@
-FROM python:3
+# FROM python:3.11-slim
 
-ENV PYTHONUNBUFFERED=1
+# ENV PYTHONUNBUFFERED=1
 
-RUN mkdir /app
+# RUN mkdir /app
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY requirements.txt /app
+# COPY requirements.txt /app
+
+# RUN pip install --upgrade pip
+
+# RUN pip install -r requirements.txt
+
+# COPY . /app
+
+# RUN flake8 
+FROM python:3.9.2-buster
+
+RUN mkdir /usr/local/app
+
+WORKDIR /usr/local/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+EXPOSE 8000
 
 RUN pip install --upgrade pip
+RUN pip install virtualenv
+RUN virtualenv /usr/local/venv
 
-RUN pip install -r requirements.txt
+COPY ./entrypoint.sh /usr/local/
 
-COPY . /app
-#RUN ./manage.py makemigrations
-#RUN ./manage.py migrate
+RUN chmod u+x /usr/local/entrypoint.sh
 
-#CMD ["./bin/run"]
+COPY . /usr/local/app/
+
+RUN flake8
+
+CMD ["/bin/bash", "/usr/local/entrypoint.sh"]

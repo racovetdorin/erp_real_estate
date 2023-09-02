@@ -1,28 +1,53 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_DB=erpdb
-      - POSTGRES_PASSWORD=password
+  postgresql:
+    container_name: postgres-db
+    image: postgres:15
+    restart: unless-stopped
+    platform: linux/arm64
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - network
     ports:
       - "5432:5432"
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    environment:
-      - ENVIRONMENT=development
-      - POSTGRES_DB_USER=user
-      - POSTGRES_DB_NAME=erpdb
-      - POSTGRES_DB_PASSWORD=password
-      - POSTGRES_DB_HOST=db
     env_file:
       - .env
+    environment:
+      POSTGRES_DB: erpdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+  web:
+    container_name: erp-app
+    build: .
+    depends_on:
+      - postgresql
+    platform: linux/arm64
     volumes:
-      - .:/app
+      - .:/usr/local/app
+    restart: unless-stopped
+    networks:
+      - network
     ports:
       - "8000:8000"
-    depends_on:
-      - db
+    env_file:
+      - .env
+    environment:
+      ENVIRONMENT: development
+      DATABASE_HOST: postgres-db
+      DATABASE_NAME: erpdb
+      DATABASE_USER: user
+      DATABASE_PASSWORD: password
+
+networks:
+  network:
+    name: erp-network
+    driver: bridge
+volumes:
+  data:
+    name: erp-data
+    driver: local
+  django-app:
+    name: django-data
+    driver: local

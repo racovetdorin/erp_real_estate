@@ -1,8 +1,9 @@
 from django.contrib import admin
-from users.models import User
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from .models import User
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DjangoUserAdmin):
     list_display = ('first_name', 'last_name', 'email')
-
+    ordering = ['email']
