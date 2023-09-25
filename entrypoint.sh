@@ -12,8 +12,8 @@ if [ -e "requirements.txt" ]; then
   pip install -r requirements.txt
 fi
 
-# echo "Linting!!!"
-# flake8
+echo "Linting!!!"
+flake8
 
 if [ -e "manage.py" ]; then
   echo "Running migrations"

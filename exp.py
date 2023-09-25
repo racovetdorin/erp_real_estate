@@ -4,7 +4,7 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent='my_app')
 # geocode = partial(geolocator.geocode, languages='ro')
-location = geolocator.geocode('str Mihai Viteazul 250, Ialoveni')
+location = geolocator.geocode('strada Mihai Viteazul 104, Ialoveni')
 print(location.address)
 print(location.latitude, location.longitude)
 

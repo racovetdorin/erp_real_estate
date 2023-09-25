@@ -130,10 +130,10 @@ class OfficeAttributes(BasePropertyAttributes):
         ordering = ['title']
 
 
-@receiver(pre_save, sender=HomeAttributes)
+@receiver(pre_save, sender=OfficeAttributes)
 def pre_save_office_attributes(sender, instance, *args, **kwargs):
-    if instance.property.property_type != Property.PropertyType.HOME:
-        raise ValidationError('Property type must be home!')
+    if instance.property.property_type != Property.PropertyType.OFFICE:
+        raise ValidationError('Property type must be office!')
 
 
 class BuildingAttributes(BasePropertyAttributes):
@@ -147,6 +147,12 @@ class BuildingAttributes(BasePropertyAttributes):
         ordering = ['title']
 
 
+@receiver(pre_save, sender=BuildingAttributes)
+def pre_save_building_attributes(sender, instance, *args, **kwargs):
+    if instance.property.property_type != Property.PropertyType.BUILDING:
+        raise ValidationError('Property type must be building!')
+
+
 class TownhouseAttributes(BasePropertyAttributes):
     property = models.ForeignKey(Property, on_delete=models.CASCADE,
                                  related_name='townhouse_attributes',
@@ -158,6 +164,12 @@ class TownhouseAttributes(BasePropertyAttributes):
         ordering = ['title']
 
 
+@receiver(pre_save, sender=TownhouseAttributes)
+def pre_save_townhouse_attributes(sender, instance, *args, **kwargs):
+    if instance.property.property_type != Property.PropertyType.TOWNHOUSE:
+        raise ValidationError('Property type must be townhouse!')
+
+
 class ShopAttributes(BasePropertyAttributes):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='shop_attributes',
                                  verbose_name=_('Shop attributes'))
@@ -166,6 +178,12 @@ class ShopAttributes(BasePropertyAttributes):
         verbose_name = _('Shop attributes')
         verbose_name_plural = _('Shops attributes')
         ordering = ['title']
+
+
+@receiver(pre_save, sender=ShopAttributes)
+def pre_save_shop_attributes(sender, instance, *args, **kwargs):
+    if instance.property.property_type != Property.PropertyType.SHOP:
+        raise ValidationError('Property type must be shop!')
 
 
 class GarageAttributes(BasePropertyAttributes):
@@ -179,3 +197,9 @@ class GarageAttributes(BasePropertyAttributes):
         verbose_name = _('Garage attributes')
         verbose_name_plural = _('Garages attributes')
         ordering = ['title']
+
+
+@receiver(pre_save, sender=GarageAttributes)
+def pre_save_garage_attributes(sender, instance, *args, **kwargs):
+    if instance.property.property_type != Property.PropertyType.GARAGE:
+        raise ValidationError('Property type must be garage!')

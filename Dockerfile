@@ -36,6 +36,4 @@ RUN chmod u+x /usr/local/entrypoint.sh
 
 COPY . /usr/local/app/
 
-RUN flake8
-
 CMD ["/bin/bash", "/usr/local/entrypoint.sh"]
